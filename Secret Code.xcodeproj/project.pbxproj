@@ -24,7 +24,8 @@
 
 /* Begin PBXFileReference section */
 		1117CA9A2257351100B43C5B /* Secret Code */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Secret Code"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1117CA9D2257351100B43C5B /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		1117CA9D2257351100B43C5B /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = main.c; path = "/Users/mitchellscales/Desktop/UNI/ENGG1003/Assesments/Secret Code/Secret Code/main.c"; sourceTree = "<absolute>"; };
+		115E495322607B7200D7CF2B /* File.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = File.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +58,7 @@
 		1117CA9C2257351100B43C5B /* Secret Code */ = {
 			isa = PBXGroup;
 			children = (
+				115E495322607B7200D7CF2B /* File.txt */,
 				1117CA9D2257351100B43C5B /* main.c */,
 			);
 			path = "Secret Code";
