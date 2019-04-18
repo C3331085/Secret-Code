@@ -27,11 +27,14 @@ void deSub(void); // Decryption function  using substitution with no input of ou
 void enSub(void); // Encryption function  using substitution with no input of output required
 int menu(void); //function for menu
 int keys(void); //function for entering key for rotation
+void Random_Rotation(void);
 
 FILE *keyss; //Creating a file name called keyss to call later to store the key value
 FILE *Outputs; // Creating a file named outputs to output the text to
 FILE *Encryptions; //createing a file name called Encryptions to call later to hold words to encrypt
 FILE *Decryptions; // creating a file name called decryptions to call later to hold words to decrypt
+FILE *temp;
+FILE *TEXT;
 char* alphabet[26] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y","Z"}; //creating an array of characters to store the alphabet
 char* sub_alphabet[26] = {"Q", "W", "E","R","T","Y","U","I","O","P","A","S","D","F","G","H","J","K","L","Z","X","C","V","B","N","M"};// creating an array for a substitution alphabet
 
@@ -50,7 +53,7 @@ int main() {
         case 1: en();  break;
         case 3: enSub(); break;
         case 4: deSub(); break;
-        case 5: ; break;
+        case 5: Random_Rotation(); break;
      
      }
     }
@@ -104,7 +107,7 @@ void en(){
     
     for(i=0; str[i] != '\0'; i++){
         str[i] = str[i] + key;
-        if(str[i] >= 'Z'){
+        if(str[i] > 'Z'){
             str[i] = str[i] - 26;
             break;}
     }
@@ -133,7 +136,7 @@ void de(){
     for(i=0; str2[i] != '\0'; i++){
         str2[i] = str2[i] - key;
         
-        if(str2[i] <= 'A'){
+        if(str2[i] < 'A'){
             str2[i] = str2[i] + 26;
             break;}
     };
@@ -184,7 +187,57 @@ void deSub(){
     
     }
     
+void Random_Rotation(void){
+     Decryptions = fopen("/Users/mitchellscales/Desktop/UNI/ENGG1003/Assesments/Secret Code/Secret Code/Decryption.txt", "r");
+     temp = fopen("/Users/mitchellscales/Desktop/UNI/ENGG1003/Assesments/Secret Code/Secret Code/temp.txt", "w");
+    
+    char line[256];
+    char str3[256];
+    char str2[256];
+    char str5[256];
+    int key;
+    int compare;
+    int n;
+    int t = 0;
+    
+    for(n = 0; n<25; n++){
+        fscanf(Decryptions, "%s", str2);
+        
+        for(i=0; str2[i] != '\0'; i++){
+            key = n;
+            str3[i] = str2[i] - key;
+            
+            if(str3[i] <= 'a'){
+                str3[i] = str3[i] + 25;}
+            
+        }
+        fprintf(temp, "%s\n", str3);
+        
+    }
+    fclose(temp);
+    FILE* CLONE  = fopen("/Users/mitchellscales/Desktop/UNI/ENGG1003/Assesments/Secret Code/Secret Code/temp.txt", "r");
+    while (fgets(str5, sizeof(str5), CLONE)) { //Reads words from dictionary
+        t++;
+        i=0;
+        if(t<27){
+            
+            FILE* file = fopen("/Users/mitchellscales/Desktop/UNI/ENGG1003/Assesments/Secret Code/Secret Code/TEXT.txt", "r");
+            while (fgets(line, sizeof(line), file)) { //Reads words from dictionary
+                i++;
+                if(i<300000)//10 words line= dict word
+                {
+                    compare = strcmp(line, str5);
+                    if(compare == 0){
+                        printf("%s\n",line);
+                    }
+                    
+                }
+            }
+        }
+        
+    }
 
+}
     
 
 
