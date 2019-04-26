@@ -54,6 +54,7 @@ int main() {
         case 3: enSub(); break;
         case 4: deSub(); break;
         case 5: Random_Rotation(); break;
+        case 6: keys(); break;
      
      }
     }
@@ -65,11 +66,11 @@ int main() {
  */
 
 int keys(void){
-    keyss = fopen("/Users/mitchellscales/Desktop/UNI/ENGG1003/Assesments/Secret Code/Secret Code/File.txt", "r");
-    if(keyss == NULL) {
+    keyss = fopen("/Users/mitchellscales/Desktop/UNI/ENGG1003/Assesments/Secret Code/Secret Code/File.txt", "r"); //Used to open a file and name it keyys, this file stores the value of the key
+    if(keyss == NULL) { //wont attempt to open if it cant find the file
         perror("fopen()");
         return 0;}
-    fscanf(keyss, "%d", &key);
+    fscanf(keyss, "%d", &key); // promting user to enter a value for key and storing it under key
     return key;
 }
 /*
@@ -85,7 +86,7 @@ int menu(void){
     printf("3: Encryption with a substitution cipher\n");
     printf("4: Decryption with a substitution cipher\n");
     printf("5: Decryption with a rotation cipher (Advanced)\n");
-    printf("6: Decryption with a substitution cipher (Advanced\n");
+   
     printf("Selection: ");
     scanf("%d", &selection);
     return selection;
@@ -103,60 +104,102 @@ void en(){
         return;
         }
     
-    fscanf(Encryptions, "%s", str);
+    fgets(str, "%s", Encryptions); //similar to scanf, it stores the string of data from encryptions to str. Str is used as the intial string to encrypt
     
-    for(i=0; str[i] != '\0'; i++){
-        str[i] = str[i] + key;
-        if(str[i] > 'Z'){
-            str[i] = str[i] - 26;
-            break;}
+    for(i=0; str[i] != EOF; i++){ //for loop used to increment the position in the string
+        
+        if(str[i] >= 'A' && str[i] <= 'Z'){ // Only adding the value key to the character if the intial character is between A-Z
+            str[i] = str[i] + key;
+           
+            if(str[i] >= 'Z'){ // Making sure that the out put charter is between A&Z
+                str[i] = str[i] - 26;
+            }
+        }
+        
+        else if(str[i] ==  '\0'){ // Once it detects the end of line it stops the loop as it is the end of the sentence
+            break;
+        }
+        else  str[i] = str[i]; // used to detect the characters that are not between A-Z such as full stops
+        
+        
+        
     }
-        printf("%s\n", str);
-    Outputs = fopen("/Users/mitchellscales/Desktop/UNI/ENGG1003/Assesments/Secret Code/Secret Code/Output.txt", "a");
+        printf("%s\n", str); //outputting the new encrypted text to console
+    Outputs = fopen("/Users/mitchellscales/Desktop/UNI/ENGG1003/Assesments/Secret Code/Secret Code/Output.txt", "a"); //outputting the encrypted text to the output file.
     if(Outputs == NULL) {
         perror("fopen()");
         return;}
    fprintf(Outputs, "%s\n", str);
-    }
-            
+    
+}
     
 
 /*
  Inputs: No input just needs to be called
  Outputs: Outputs to terminal the string of the decrypted text as str2
  Function: Calls a string from the file decryptions and saves it as str2, then takes away the value of key to it (ASCII code ) which then prints the final string of characters. Has a if statment to make sure if the letter is lower than 'a' it adds 26 to get back to the end of the alphabet.
- Limitations: Must have only capital letters in the decryption file and terminates at the first space/ gap key.
+ Limitations: Must have only capital letters in the decryption file
  */
 void de(){
-    Decryptions = fopen("/Users/mitchellscales/Desktop/UNI/ENGG1003/Assesments/Secret Code/Secret Code/Decryption.txt", "r");
+    Decryptions = fopen("/Users/mitchellscales/Desktop/UNI/ENGG1003/Assesments/Secret Code/Secret Code/Decryption.txt", "r"); // opening the decrypted file to call the text needed to decrypt
     if(Decryptions == NULL) {
         perror("fopen()");
         return;}
-    fscanf(Decryptions, "%s", str2);
-    for(i=0; str2[i] != '\0'; i++){
-        str2[i] = str2[i] - key;
+
+    fgets(str2, "%s", Decryptions); //adding the data from decryptions to str2
+    
+    for(i=0; str2[i] != EOF; i++){ //increment loop the characters inside each string
         
-        if(str2[i] < 'A'){
-            str2[i] = str2[i] + 26;
-            break;}
-    };
-    printf("%s\n", str2);
+        if(str2[i] >= 'A' && str2[i] <= 'Z'){ //Only decrypting the letters between A&Z
+            str2[i] = str2[i] - key;
+            if(str2[i] < 'A'){ //used for the case that the character is below A
+                str2[i] = str2[i] + 26;
+            }
+            
+        }
+        
+        else if(str2[i] ==  '\0'){ //if end of text stop
+            break;
+        }
+        else  str2[i] = str2[i]; //returns all the text that isnt between A and Z
+        
+        
+        
+    }
+    
+    printf("%s\n", str2); //printing decrypted text
 }
 /*
  Inputs: No input just needs to be called
  Outputs: to terminal the string of the encrypted text as str 4
  Function: Calls a file named encryption and saves it under str3, the value of each charater in the string is translated to a posistion in the array sub_alphabet which is then stored in str4 and printed to the terminal. Repeats for each letter to form a substitution cypher
- Limitations:Must have only capital letters in the decryption file and terminates at the first space/ gap key.
+ Limitations:Must have only capital letters in the decryption file
  */
 void enSub(){
     Encryptions = fopen("/Users/mitchellscales/Desktop/UNI/ENGG1003/Assesments/Secret Code/Secret Code/Encryption.txt", "r");
     if(Encryptions == NULL) {
         perror("fopen()");
         return;}
-    fscanf(Encryptions, "%s", str3);
-    for(i=0; str3[i] != '\0';i++){
-        x = (int)str3[i]- 65;
-        str4[i] = *sub_alphabet[x];}
+
+        
+    
+    fgets(str3, "%s", Encryptions);
+    
+    for(i=0; str3[i] != EOF; i++){
+        
+        if(str3[i] >= 'A' && str3[i] <= 'Z'){
+            x = (int)str3[i]- 65; //x being used as a place holder variable to indicate the position on the substituted alphabet
+            str4[i] = *sub_alphabet[x]; //the character value from the substituted alphabet being stransferred to the position of i in str4 for the final encrypted text
+            
+        }
+        
+        else if(str3[i] ==  '\0'){
+            break;
+        }
+        
+        else  str4[i] = str3[i];
+    
+    }
     
     printf("%s\n", str4);
     
@@ -172,15 +215,28 @@ void deSub(){
     if(Decryptions == NULL) {
         perror("fopen()");
         return;}
-    fscanf(Decryptions, "%s", str5);
-    for(y = 0 ; str5[y] != '\0'; y++){
-        for ( i = 0; i < 26; i++)
-        {
-            if (str5[y] == *sub_alphabet[i])
+    
+    fgets(str5, "%s", Decryptions);
+    
+    for(y=0; str5[y] != EOF; y++){ //for loop used to increment the position of the string
+        
+        if(str5[y] >= 'A' && str5[y] <= 'Z'){ //making sure its between A and Z
+            for ( i = 0; i < 26; i++) //increment used to go through the alphabet comparing the string character at y to the character in the substituted alphabet to find the index of the alphabet
             {
-                Alpha_index = i;
-                str6[y] = *alphabet[Alpha_index];}
+                if (str5[y] == *sub_alphabet[i])
+                {
+                    Alpha_index = i;
+                    str6[y] = *alphabet[Alpha_index];} //determining the value of alphabet
+            }
+            
         }
+        
+        else if(str5[y] ==  '\0'){
+            break;
+        }
+        
+        else  str6[y] = str5[y];
+        
     }
     
     printf("%s\n", str6);
@@ -191,44 +247,73 @@ void Random_Rotation(void){
      Decryptions = fopen("/Users/mitchellscales/Desktop/UNI/ENGG1003/Assesments/Secret Code/Secret Code/Decryption.txt", "r");
      temp = fopen("/Users/mitchellscales/Desktop/UNI/ENGG1003/Assesments/Secret Code/Secret Code/temp.txt", "w");
     
-    char line[256];
-    char str3[256];
-    char str2[256];
-    char str5[256];
-    int key;
-    int compare;
-    int n;
-    int t = 0;
+    char line[256]; //final string from decrypted text
+    char str3[256]; // string to store all decrypted words
+    char str2[256]; // string to store pre-decrypted words
+    char str5[256]; //string used to compare decrypted words against dictionary
+    int key; //the key value
+    int compare; // variable to set if the word matches the dictionary word
     
-    for(n = 0; n<25; n++){
-        fscanf(Decryptions, "%s", str2);
+    int t = 0;// increment counter for word in the dictionary
+    
+    
+    fgets(str2, "%s", Decryptions); // getting the intial string of words to decrypt
+    
+    for(key = 1; key<=25; key++){ //for loop initalised for going through all the possible values that a key rotation could be
         
-        for(i=0; str2[i] != '\0'; i++){
-            key = n;
-            str3[i] = str2[i] - key;
+        for(i=0; str2[i] != EOF; i++){ //for loop used to go though all the characters in the string
             
-            if(str3[i] <= 'a'){
-                str3[i] = str3[i] + 25;}
+            if(str2[i] >= 'A' && str2[i] <= 'Z'){
+                    str3[i] = str2[i] - key; //taking the key value from the intial value of the string
+                    if(str3[i] < 'A'){
+                        str3[i] = str3[i] + 26;}
+                    
+                    
+                }
+                
+              else  if(str2[i] ==  '\0'){
+                break;
+                }
+                
+                else if(str2[i] == ' '){ //placing a new line where a space is in the sentence so it can be decoded
+                 
+                    str3[i] = '\n';
+                   
+                }
+                
+               // else str3[i] = str2[i];
+                
+            }
             
-        }
-        fprintf(temp, "%s\n", str3);
+
+            
         
-    }
-    fclose(temp);
+       fprintf(temp, "%s\n", str3);  //  storing the decrypted words in the temp file
+}
+    
+    fclose(temp); //closing the file
     FILE* CLONE  = fopen("/Users/mitchellscales/Desktop/UNI/ENGG1003/Assesments/Secret Code/Secret Code/temp.txt", "r");
     while (fgets(str5, sizeof(str5), CLONE)) { //Reads words from dictionary
-        t++;
-        i=0;
-        if(t<27){
+        t++;// incrementing used for choosing the words
+        i=0; //setting i to be zero to re use it as a counter for the word numbber in the dictionary
+        if(t != EOF){
             
             FILE* file = fopen("/Users/mitchellscales/Desktop/UNI/ENGG1003/Assesments/Secret Code/Secret Code/TEXT.txt", "r");
             while (fgets(line, sizeof(line), file)) { //Reads words from dictionary
                 i++;
-                if(i<300000)//10 words line= dict word
+                if(i<750000)//10 words line= dict word
                 {
-                    compare = strcmp(line, str5);
+                    compare = strcmp(line, str5); //variable used to compare the word from the decrypted text to the dictionary and if they match returns 0 and a random number if they do not.
                     if(compare == 0){
-                        printf("%s\n",line);
+                      
+                        printf("%s \n",line);//if the word matches it prints that word to the console.
+                        
+                        Outputs = fopen("/Users/mitchellscales/Desktop/UNI/ENGG1003/Assesments/Secret Code/Secret Code/Output.txt", "a");
+                        if(Outputs == NULL) {
+                            perror("fopen()");
+                            return;}
+                        fprintf(Outputs, "%s\n", line); //also outputing the word to the file named outputs \
+                        
                     }
                     
                 }
